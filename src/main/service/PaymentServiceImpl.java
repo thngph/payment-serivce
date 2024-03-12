@@ -31,6 +31,21 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public void start() {
+        System.out.println("Welcome to the payment system");
+        System.out.println("Type 'exit' to close the application");
+        System.out.println(
+            "Available commands:\n" +
+            "- CHECK_BALANCE\n" +
+            "- CASH_IN <amount>\n" +
+            "- LIST_ALL\n" +
+            "- LIST_UNPAID\n" +
+            "- ADD_BILL <id> <type> <amount> <dueDate> <state> <provider>\n" +
+            "- PAY_BILL <id>\n" +
+            "- PAY_BILLS <id1> <id2> ...\n" +
+            "- SCHEDULE_PAYMENT <id> <date>\n" +
+            "- SEARCH_BILLS <provider>\n" +
+            "- SHOW_TRANS\n"
+        );
         boolean running = true;
 
         while (running) {
@@ -132,6 +147,13 @@ public class PaymentServiceImpl implements PaymentService {
             }
         }
         return scheduledPayment;
+    }
+
+    public Bill[] searchBills(Bill[] bills, String provider) {
+        Bill[] billsByProvider = Arrays.stream(bills)
+                .filter(bill -> bill.provider.equals(provider))
+                .toArray(Bill[]::new);
+        return billsByProvider;
     }
 
     public void processCommand(String command) {
@@ -245,6 +267,16 @@ public class PaymentServiceImpl implements PaymentService {
                     }
                 } else {
                     System.out.println("Invalid number of arguments for SCHEDULE_PAYMENT command");
+                }
+                break;
+
+            case "SEARCH_BILLS":
+                System.out.println("Searching bills");
+                if (args.length > 0) {
+                    String provider = args[0];
+                    Printer.printTable(Arrays.asList(searchBills(this.bills, provider)));
+                } else {
+                    System.out.println("No provider specified for SEARCH_BILLS command");
                 }
                 break;
 

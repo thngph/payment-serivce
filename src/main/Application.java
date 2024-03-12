@@ -19,8 +19,6 @@ public class Application {
             new Transaction("DEPOSIT", 100, 100),
         };
         ScheduledPayment[] scheduledPayments = {};
-        
-        System.out.println("Amount: $" + user.getBalance());
         PaymentService shell = new PaymentServiceImpl(user, bills, transactions, scheduledPayments);
         shell.start();
     }
